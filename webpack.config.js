@@ -1,5 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-//const Dotenv = require('dotenv-webpack')
+const Dotenv = require('dotenv-webpack')
 
 const htmlPlugin = new HtmlWebpackPlugin({
   template: './src/index.html',
@@ -21,5 +21,5 @@ module.exports = {
     ],
   },
   devtool: 'inline-source-map',
-  plugins: [htmlPlugin /* , new Dotenv() */],
+  plugins: [htmlPlugin, new Dotenv()],
 }
