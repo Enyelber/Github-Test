@@ -1,20 +1,31 @@
-body {
-  margin: 20px;
-  width: 100%;
-}
 .footer,
-.footer__opctions,
-.header {
+.footer__opctions {
   display: flex;
-}
-.header {
-  width: 100%;
-  height: 50px;
 }
 .header__logo {
   width: 30%;
 }
-.body {
-  width: 100%;
-  margin: 20px;
+.header__btn-dark {
+  width: 30%;
+}
+.repository {
+  list-style: none;
+  padding: 0;
+}
+.repository__autor,
+.repository__autor--normal {
+  font-size: 10px;
+}
+.repository__autor {
+  font-weight: bold;
+}
+.repository__autor--normal {
+  font-weight: normal;
+}
+.repository__link {
+  text-decoration: none;
+  color: currentColor;
+}
+.repository__card:hover {
+  background: #92b95582;
 }

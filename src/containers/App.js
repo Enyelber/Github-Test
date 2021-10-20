@@ -2,14 +2,25 @@ import React from 'react'
 import Header from '../components/Header'
 import Body from '../components/Body'
 import Footer from '../components/Footer'
+import { ThemeProvider, Container } from 'theme-ui'
+import theme from '../components/theme/theme'
 
 const App = () => {
   return (
-    <>
-      <Header />
-      <Body />
-      <Footer />
-    </>
+    <ThemeProvider theme={theme}>
+      <>
+        <Container>
+          <div
+            sx={{
+              width: ['100%', '50%', '25%'],
+            }}>
+            <Header />
+            <Body />
+            {/* <Footer /> */}
+          </div>
+        </Container>
+      </>
+    </ThemeProvider>
   )
 }
 
