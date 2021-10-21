@@ -1,7 +1,6 @@
 import React from 'react'
 import Header from '../components/Header'
 import Body from '../components/Body'
-import Footer from '../components/Footer'
 import { ThemeProvider, Container } from 'theme-ui'
 import theme from '../components/theme/theme'
 
@@ -16,7 +15,6 @@ const App = () => {
             }}>
             <Header />
             <Body />
-            {/* <Footer /> */}
           </div>
         </Container>
       </>
