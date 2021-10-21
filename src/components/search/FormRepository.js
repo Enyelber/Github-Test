@@ -3,28 +3,24 @@ import { useState, useEffect } from 'react'
 import {
   Label,
   Input,
-  Select,
-  Textarea,
-  Radio,
-  Checkbox,
-  Slider,
   Flex,
   Box,
   Button,
-  Text,
   Card,
   Heading,
   Badge,
   Image,
   Paragraph,
-  Alert,
-  Close,
   Message,
+  Spinner,
+  Text,
+  Divider,
 } from 'theme-ui'
 
 import imgIssues from '../../assets/img/issue.png'
 import imgPullRequest from '../../assets/img/pull-request.png'
-import { Spinner } from 'theme-ui'
+import Modal from '../utils/Modal'
+
 //import GridRepository from './GridRepository'
 
 /* import API from './datos.json'
@@ -38,6 +34,13 @@ export default function FormRepository() {
   const [infoRepos, setInfoRepos] = useState([])
   const [repoType, setRepoType] = useState(true)
   const [isSummit, setIsSummit] = useState(0)
+  const [modalIsOpen, setIsOpen] = useState(false)
+  const [info, setInfo] = useState({
+    title: '',
+    body: '',
+    comments_url: '',
+  })
+  const [infoComments, setInfoComments] = useState([])
 
   useEffect(() => {
     getDataRepository(dataToSearch)
@@ -76,9 +79,7 @@ export default function FormRepository() {
         setIsSummit(1)
         const [user, repo] = dataToSearch.split('/')
         const response = await fetch(
-          //`https://api.github.com/repos/${user}/${repo}`
           `https://api.github.com/repos/${user}/${repo}/issues`,
-          //`https://api.github.com/repos/${user}/${repo}/pulls`,
           {
             headers: {
               Accept: 'application/vnd.github.v3+json',
@@ -94,6 +95,11 @@ export default function FormRepository() {
       /*  setInfoRepos(initialState) */
     }
   }
+  const getDatacomments = (comments_url) => {
+    fetch(comments_url)
+      .then((response) => response.json())
+      .then((data) => setInfoComments(data))
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
     setErrors(ValidateInfoSearch(valores))
@@ -105,6 +111,12 @@ export default function FormRepository() {
       }
     }
   }
+
+  function getInfo(title, body, comments_url) {
+    setIsOpen(!modalIsOpen)
+    const comments = getDatacomments(comments_url)
+    setInfo({ ...info, title: title, body: body, comments_url: comments })
+  }
   return (
     <div
       sx={{
@@ -114,7 +126,7 @@ export default function FormRepository() {
         py: 4,
       }}>
       <div>
-        <Box as='form' onSubmit={handleSubmit}>
+        <Box as='form' sx={{ minWidth: 500 }} onSubmit={handleSubmit}>
           <Label htmlFor='username' mb={3}>
             Username/Repository
           </Label>
@@ -127,11 +139,21 @@ export default function FormRepository() {
           />
 
           <Button sx={{ width: '100%', cursor: 'pointer' }}>Submit</Button>
-          <span type='invalid'>{errors.search && <p>{errors.search}</p>}</span>
+          <span className='errorSpan' type='invalid'>
+            {errors.search && <p>{errors.search}</p>}
+          </span>
           <Spinner sx={{ opacity: isSummit }} />
         </Box>
         <div>
-          <h1>GridRepository</h1>
+          <Text
+            sx={{
+              fontSize: 4,
+              fontWeight: 'bold',
+              display: 'flex',
+              justifyContent: 'center',
+            }}>
+            RESPOITORIES
+          </Text>
         </div>
       </div>
       <div
@@ -141,6 +163,50 @@ export default function FormRepository() {
           px: 3,
           py: 4,
         }}>
+        <Modal
+          state={modalIsOpen}
+          changeState={setIsOpen}
+          title='Information'
+          showHeader={true}
+          showOverlay={true}
+          positionModal={'center'}
+          padding={'20px'}>
+          <div>
+            <Text
+              sx={{
+                fontSize: 4,
+                fontWeight: 'bold',
+              }}>
+              {info.title}
+            </Text>
+            <p>{info.body}</p>
+            <p>{info.comments_url}</p>
+
+            <ul className='repository'>
+              {infoComments.map((item) => (
+                <li key={item.body}>
+                  <Flex sx={{ flexDirection: 'column' }}>
+                    <span className='repository__autor'>Comment:</span>
+                    <span className='repository__autor--normal'>
+                      {' '}
+                      {item.body}
+                    </span>
+                    <span className='repository__autor'>Create:</span>
+                    <span className='repository__autor--normal'>
+                      {' '}
+                      {Date(item.created_at)}{' '}
+                    </span>
+                    <span className='repository__autor'>Create:</span>
+                    <span className='repository__autor--normal'>
+                      {item.author_association}
+                    </span>
+                  </Flex>
+                  <Divider />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Modal>
         <Box>
           <Box p={0}>
             <div
@@ -150,13 +216,17 @@ export default function FormRepository() {
               }}>
               {repoType === true ? (
                 <ul className='repository'>
-                  {console.log(infoRepos)}
                   {infoRepos.message === 'Not Found' ? (
                     <Message>Repository does not exist</Message>
                   ) : (
                     infoRepos.map((item) => (
                       <li key={item.id}>
-                        <a className='repository__link' href=''>
+                        <a
+                          className='repository__link'
+                          href='#'
+                          onClick={() =>
+                            getInfo(item.title, item.body, item.comments_url)
+                          }>
                           <Card
                             className='repository__card'
                             sx={{
@@ -211,7 +281,7 @@ export default function FormRepository() {
                                 </span>
                                 <span className='repository__autor--normal'>
                                   {' '}
-                                  {item.created_at}
+                                  {Date(item.created_at).toLocaleString()}
                                 </span>
                               </Flex>
                               <Flex>
