@@ -56,7 +56,13 @@ theme UI was used, with a CSS file and a modal with Style-Components was impleme
 
 Allows you to search the Issues and pull request of a certain repository, so you must enter the user / name of the repository.
 
-It shows the open issues and pull request, and if you want to see the comments of any of them, you just have to press the card
+It shows the open issues and pull request, and if you want to see the comments of any of them, you just have to press the card.
+
+A test repository is made available where there are issues and pull request.
+
+```bash
+enyelber/test_repository
+```
 
 ## License
 
