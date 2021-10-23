@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 const Modal = ({
   children,
@@ -42,7 +42,16 @@ const Modal = ({
     </>
   )
 }
-
+Modal.propTypes = {
+  children: PropTypes.object,
+  state: PropTypes.bool,
+  changeState: PropTypes.func,
+  title: PropTypes.string,
+  showHeader: PropTypes.bool,
+  showOverlay: PropTypes.bool,
+  positionModal: PropTypes.string,
+  padding: PropTypes.string,
+}
 export default Modal
 
 const Overlay = styled.div`

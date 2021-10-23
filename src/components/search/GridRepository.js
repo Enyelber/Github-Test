@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import {
   Flex,
@@ -15,10 +14,10 @@ import {
 import imgIssues from '../../assets/img/issue.png'
 import imgPullRequest from '../../assets/img/pull-request.png'
 import Modal from '../utils/Modal'
+import PropTypes from 'prop-types'
 
 export default function GridRepository(props) {
   const [modalIsOpen, setIsOpen] = useState(false)
-  //const [infoComments, setInfoComments] = useState([])
   const [infoComments, setInfoComments] = useState([])
 
   const [info, setInfo] = useState({
@@ -32,11 +31,13 @@ export default function GridRepository(props) {
     const comments = getDatacomments(comments_url)
     setInfo({ ...info, title: title, body: body, comments_url: comments })
   }
+
   const getDatacomments = (comments_url) => {
     fetch(comments_url)
       .then((response) => response.json())
       .then((data) => setInfoComments(data))
   }
+
   return (
     <>
       <Modal
@@ -203,4 +204,8 @@ export default function GridRepository(props) {
       </Box>
     </>
   )
+}
+GridRepository.propTypes = {
+  repoType: PropTypes.bool,
+  infoRepos: PropTypes.array,
 }
